@@ -1,0 +1,26 @@
+.containerData {
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.282);
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.containerData button {
+    width: 100%;
+}
+
+#staticBackdrop {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+header {
+    border-bottom: 1px solid #3a4960;
+}
+
+.bg-box {
+    border: 1px solid #3a4960;
+}

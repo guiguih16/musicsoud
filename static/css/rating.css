@@ -1,0 +1,17 @@
+#balance {
+    background-color: #1db954;
+}
+
+.giregire {
+  animation: girarInfinito 12s linear infinite;
+  display: inline-block;
+}
+
+@keyframes girarInfinito {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

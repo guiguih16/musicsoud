@@ -1,0 +1,220 @@
+<!doctype html>
+    <html lang="it">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Spotify</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+        <link rel="stylesheet" href="../static/css/login.css"> <!-- Live Server -->
+        <link rel="stylesheet" href="../static/css/dashboard.css"> <!-- Live Server -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}"> <!-- Flask -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"> <!-- Flask -->
+    </head>
+    <body>
+        <header class="container-fluid py-3 px-4  pb-4 d-flex flex-row justify-content-between align-items-center">
+            <img onclick="location.href='/'" src="{{ url_for('static', filename='img/logo.png') }}" onerror="this.onerror=null;this.src='../static/img/logo.png';" width="150px" alt="Imagem">
+            <svg onclick="location.href='/logout'" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-box-arrow-right text-danger" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+            </svg>
+        </header>
+        
+        <!-- SALDO ATUAL -->
+        <div class="container mt-3 mx-auto containerData bg-box text-light">
+            <div id="title-content" class="d-flex flex-row justify-content-between align-items-center">
+                <span style="color: #768192;" id="saldo-currency">Saldo atual</span>
+                <svg style="color: aqua;" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-wallet" viewBox="0 0 16 16">
+                    <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a2 2 0 0 1-1-.268M1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1"/>
+                </svg>
+            </div>
+            <h2><b>{{ user.balance }}&euro;</b></h2>
+            <span style="color: #768192;" class="mt-2" id="legends-saldo-currency">Disponível para retirar</span>
+            <!-- Button trigger modal -->
+            <!-- Botão que abre o modal correto -->
+            <button class="btn bg-btn mt-3" id="do-saque" onclick="verificarSaldo()">
+                REALIZAR SAQUE
+            </button>
+        </div>
+
+        <!-- SAQUES EM ANÁLISES -->
+        <div class="container mt-3 mx-auto containerData bg-box text-light">
+            <div id="title-content" class="d-flex flex-row justify-content-between align-items-center">
+                <span style="color: #768192;" id="analysis">Saques em análises</span>
+                <svg style="color: #fbff00;" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-clock-history" viewBox="0 0 16 16">
+                    <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/>
+                    <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/>
+                    <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/>
+                </svg>
+            </div>
+            <h2><b>{{ user.withdrawn }}&euro;</b></h2>
+            <span style="color: #768192;" class="mt-2" id="legends-analysis">Aguardando aprovação</span>
+        </div>
+
+        <!-- ÚLTIMO SAQUE APROVADO -->
+        <div class="container mt-3 mx-auto containerData bg-box text-light">
+            <div id="title-content" class="d-flex flex-row justify-content-between align-items-center">
+                <span style="color: #768192;" id="title-last-withdrawl">Ultimo prelievo approvato</span>
+                <svg style="color: #1db954;" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                    <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/>
+                </svg>
+            </div>
+            <h2><b>{{ user.last_withdraw_date }}&euro;</b></h2>
+            <span style="color: #768192;" class="mt-2" id="legends-last-withdrawl">Essendo una transazione internazionale, i tempi previsti sono fino a 5 giorni lavorativi per essere completata.</span>
+        </div>
+
+        <!-- Avaliações -->
+        <div class="container mt-3 mx-auto containerData bg-box text-light">
+            {% if ( user.evaluations_today >= 16 ) %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill mx-1" viewBox="0 0 16 16">
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
+                    </svg>
+                    <span id="limit-day-alert">Limite diário de avaliações atingida! Volte amanhã para continuar.</span>
+                </div>
+            {% endif %}
+            <div id="title-content" class="d-flex flex-row justify-content-between align-items-center">
+                <span style="color: #768192;" id="avaluations">Avaliações</span>
+                <svg style="color: #ff0000;" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                </svg>
+            </div>
+            <h2><b>{{ user.evaluations_today }}</b></h2>
+            <span style="color: #768192;" class="mt-2" id="legendas-avaluations">Realizadas hoje</span>
+            <!-- Button trigger modal -->
+             {% if ( user.evaluations_today >= 16 ) %}
+                <button class="btn btn-secondary mt-3" disabled id="wait">AGUARDE</button>
+                {% else %}
+                <button class="btn btn-primary mt-3" onclick="location.href='/rating'" id="do-avaluations">FAZER AVALIAÇÕES</button>
+             {% endif %}
+        </div>
+
+        <!-- Faturamento -->
+        <div class="container mt-3 mx-auto containerData bg-box text-light">
+            <div id="title-content" class="d-flex flex-row justify-content-between align-items-center">
+                <span style="color: #768192;" id="receit">Faturamento</span>
+                <svg style="color: #1db954;" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
+                    <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z"/>
+                </svg>
+            </div>
+            <h2><b>{{ user.earned_today }}&euro;</b></h2>
+            <span style="color: #768192;" class="mt-2" id="legends-receit">Gerado hoje</span>
+        </div>
+
+        <!-- Reembolso Button -->
+        <div class="container mt-3 mx-auto text-center">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger py-4" data-bs-toggle="modal" data-bs-target="#refundModal" style="width: 90%; max-width: 500px;">
+                Richiedi Rimborso
+            </button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="refundModal" tabindex="-1" aria-labelledby="refundModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="refundModalLabel">Conferma Rimborso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Confermando questo rimborso, il tuo accesso all'app verrà bloccato definitivamente e nessun prelievo sarà approvato. Sei sicuro di voler procedere?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <a href="https://soundrewards.netlify.app/refund" class="btn btn-danger">Conferma Rimborso</a>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <footer style="height: 100px; color: transparent;">.</footer>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Saldo insuficiente!</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <u>Per effettuare il primo prelievo</u>, è necessario avere un saldo minimo di <b>2.000€</b> disponibile.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ho capito</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal: Inserisci PayPal -->
+        <div class="modal fade" id="paypalModal" data-bs-backdrop="static" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Inserisci il tuo PayPal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Saldo attuale: <b>{{ "%.2f"|format(user.balance) }} €</b></p>
+                        <p>Per procedere, inserisci l'e-mail del tuo PayPal. Se non ne hai uno, per favore, creane uno. un account PayPal</p>
+                        <input type="email" class="form-control" id="inputPaypal" placeholder="nome@paypal.com">
+                        <small class="text-muted">L'importo totale verrà trasferito dopo la verifica.</small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <button type="button" class="btn btn-primary" onclick="confirmarSaque()">Conferma Prelievo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function verificarSaldo() {
+                const balance = {{ user.balance }};
+                if (balance < 2000) {
+                    // Abre modal de saldo insuficiente
+                    new bootstrap.Modal(document.getElementById('staticBackdrop')).show();
+                } else {
+                    // Abre modal do PayPal
+                    document.getElementById('inputPaypal').value = "{{ user.paypal }}"; // pré-preenche se já tiver
+                    new bootstrap.Modal(document.getElementById('paypalModal')).show();
+                }
+            }
+
+            async function confirmarSaque() {
+                const paypal = document.getElementById('inputPaypal').value.trim();
+                const balance = {{ user.balance }};
+
+                if (!paypal || !isValidEmail(paypal)) {
+                    alert("Por favor, insira um e-mail válido do PayPal.");
+                    return;
+                }
+
+                // Envia para o backend
+                const res = await fetch('/confirm-withdraw', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `amount=${balance}&paypal=${encodeURIComponent(paypal)}`
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    location.reload(); // atualiza a página
+                } else {
+                    alert("Erro: " + data.error);
+                }
+            }
+
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+        <script src="../static/js/lang-dashboard.js" defer></script> <!-- Live Server -->
+        <script src="{{ url_for('static', filename='js/lang-dashboard.js') }}" defer></script> <!-- Flask -->
+    </body>
+
+</html>

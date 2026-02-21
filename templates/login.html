@@ -1,0 +1,69 @@
+<!doctype html>
+    <html lang="it">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Spotify</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+        <link rel="stylesheet" href="../static/css/login.css"> <!-- Live Server -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}"> <!-- Flask -->
+    </head>
+    <body>
+        <div class="container mt-5 mx-auto bg-box text-center" id="box-form">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" onerror="this.onerror=null;this.src='../static/img/logo.png';" width="200px" alt="Imagem">
+            <p id="title-form" style="color: #768192;" class="mt-2">Entre na sua conta para continuar</p>
+            <br>
+            <div class="alert alert-danger" role="alert">
+                Instabilità temporanea nella riproduzione audio musicale. Stiamo lavorando per risolvere il problema.
+            </div>
+            {% if error %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill mx-1" viewBox="0 0 16 16">
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
+                    </svg>
+                    {{error}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+            {% if success %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill mx-1" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                    </svg>
+                    {{success}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+            <form action="/login" method="post" id="formLogin">
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="username" placeholder="Username" name="username">
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div>
+                <button type="submit" class="btn bg-btn" id="login">Login</button>
+                <button class="btn bg-btn2 mt-2" id="to-register">Cadastre-se</button>
+            </form>
+
+            <form action="/register" method="post" id="formRegister" class="d-none">
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="confirm-username" placeholder="Username" name="username">
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" id="confirm-password" name="password" placeholder="Password">
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" id="confirm-confirm-password" name="confirm-password" placeholder="Confirm password">
+                </div>
+                <button type="submit" class="btn bg-btn" id="create-account">Criar Conta</button>
+                <button class="btn bg-btn2 mt-2" id="to-login">Faça Login</button>
+            </form>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+        <script src="../static/js/login.js" defer></script> <!-- Live Server -->
+        <script src="../static/js/lang-login.js" defer></script> <!-- Live Server -->
+        <script src="{{ url_for('static', filename='js/login.js') }}" defer></script> <!-- Flask -->
+        <script src="{{ url_for('static', filename='js/lang-login.js') }}" defer></script> <!-- Flask -->
+    </body>
+
+</html>
