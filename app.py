@@ -3,15 +3,16 @@ import random
 from datetime import datetime, timedelta
 from pymongo import MongoClient
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-import smtplib
-from email.message import EmailMessage
 
 # -------------------------------
 # Conexão com MongoDB
 # -------------------------------
-mongo_uri = os.environ.get("MONGO_URL")
+
+# mongo_uri = os.environ.get("MONGO_URL") >> USAR NO RAILWAY    
+mongo_uri = "mongodb://localhost:27017"
 if mongo_uri is None:
     raise Exception("MONGO_URL não encontrada no Railway")
+
 client = MongoClient(mongo_uri)
 
 db = client["spotify_rewards"]
@@ -24,39 +25,53 @@ app = Flask(__name__)
 app.secret_key = '4pp_r3w4rd$'  # troque por uma chave segura em produção
 
 # -------------------------------
+# Todas as mensagens que o Python envia para o front-end
+# -------------------------------
+# Withdrawal requested successfully!
+# Please enter your PayPal email address.
+# Insufficient balance for withdrawal.
+# Invalid amount.
+# Session expired.
+# Daily limit reached.
+# Username created successfully.
+# Username already exists.
+# Passwords do not match.
+# Invalid username or password.
+
+# -------------------------------
 # Perguntas e imagens aleatórias
 # -------------------------------
 ASKMUSIC = [
-    "La musica ha suscitato qualche emozione in te?",
-    "Ti è piaciuta la voce del cantante o della cantante?",
-    "Ascolteresti di nuovo questa canzone?",
-    "Il testo trasmette un messaggio rilevante o interessante?",
-    "La produzione musicale ti è sembrata ben fatta?",
-    "Consiglieresti questa canzone a qualcuno?",
-    "Il ritornello ti è rimasto in testa?",
-    "La canzone ti ha ricordato qualche momento della tua vita?",
-    "Lo stile della canzone corrisponde ai tuoi gusti personali?",
-    "L’artista sembra avere un’identità propria?",
-    "Hai percepito autenticità nell’interpretazione?",
-    "La canzone è diversa da ciò che ascolti di solito?",
-    "Il ritmo ti ha fatto venire voglia di ballare o muoverti?",
-    "La canzone ha il potenziale per diventare un successo?",
-    "La copertina o l’immagine dell’artista ha attirato positivamente la tua attenzione?",
-    "Il testo è facile da capire e seguire?",
-    "Ascolteresti questa canzone in diversi momenti della giornata?",
-    "La canzone ti ha lasciato la voglia di conoscere meglio l’artista?",
-    "La canzone trasmette qualche sentimento vero?",
-    "La melodia è piacevole all’orecchio?",
-    "C’è qualche parte della canzone che ti ha colpito particolarmente?",
-    "Il videoclip (se presente) migliora l’esperienza?",
-    "Credi che l’artista sia coerente con le sue altre canzoni?",
-    "La canzone è originale rispetto ad altre dello stesso genere?",
-    "Il ritmo o l’arrangiamento musicale ha attirato la tua attenzione in modo positivo?",
-    "Ti immagini di aggiungere questa canzone a una delle tue playlist?",
-    "Credi che l’artista abbia talento?",
-    "La canzone ti ha sorpreso in qualche modo?",
-    "Credi che l’artista abbia futuro nell’industria?",
-    "Consiglieresti questa canzone o artista a qualcuno con gusti musicali diversi dai tuoi?"
+    "Did the music evoke any emotion in you?",
+    "Did you like the singer’s voice?",
+    "Would you listen to this song again?",
+    "Does the lyrics convey a relevant or interesting message?",
+    "Did the music production feel well done?",
+    "Would you recommend this song to someone?",
+    "Did the chorus stick in your head?",
+    "Did the song remind you of a moment in your life?",
+    "Does the song’s style match your personal taste?",
+    "Does the artist seem to have a unique identity?",
+    "Did you feel authenticity in the performance?",
+    "Is the song different from what you usually listen to?",
+    "Did the rhythm make you want to dance or move?",
+    "Do you think this song has the potential to become a hit?",
+    "Did the cover art or the artist’s image positively catch your attention?",
+    "Are the lyrics easy to understand and follow?",
+    "Would you listen to this song at different times of the day?",
+    "Did the song make you want to learn more about the artist?",
+    "Does the song convey genuine feelings?",
+    "Is the melody pleasant to listen to?",
+    "Was there any part of the song that stood out to you?",
+    "Does the music video (if available) enhance the experience?",
+    "Do you think the artist is consistent with their other songs?",
+    "Is the song original compared to others in the same genre?",
+    "Did the rhythm or musical arrangement positively grab your attention?",
+    "Can you imagine adding this song to one of your playlists?",
+    "Do you think the artist is talented?",
+    "Did the song surprise you in any way?",
+    "Do you believe the artist has a future in the music industry?",
+    "Would you recommend this song or artist to someone with different musical tastes than yours?"
 ]
 
 IMGSRANDOM = list(range(1, 31))  # imagens de 1 a 30
@@ -134,7 +149,7 @@ def login():
             session['username'] = username
             return redirect(url_for('dashboard'))
         else:
-            return render_template('login.html', error="Nome utente o password non validi.")
+            return render_template('login.html', error="Invalid username or password.")
     return render_template('login.html')
 
 @app.route('/register', methods=['POST'])
@@ -143,14 +158,14 @@ def register():
     password = request.form.get('password')
     confirm_password = request.form.get('confirm-password')
     if password != confirm_password:
-        return render_template('login.html', error="Le password non coincidono.")
+        return render_template('login.html', error="Passwords do not match.")
     db_data = load_db()
     if username in db_data['users']:
-        return render_template('login.html', error="Il nome utente esiste già.")
+        return render_template('login.html', error="Username already exists.")
     db_data['users'][username] = {
         "password": password,
         "paypal": "",
-        "balance": 43.40,
+        "balance": 43.4,
         "withdrawn": 0.0,
         "total_withdrawn": 0.0,
         "withdrawn_requests": [],
@@ -162,7 +177,7 @@ def register():
     }
     save_db(db_data)
     session['username'] = username
-    return render_template('login.html', success="Nome utente creato con successo.")
+    return render_template('login.html', success="Username created successfully.")
 
 @app.route('/dashboard')
 def dashboard():
@@ -209,7 +224,7 @@ def salvar_avaliacoes():
         user = db_data['users'][username]
         resetar_se_novo_dia(user)
         if user['evaluations_today'] >= 16 or user['earned_today'] >= 120.0:
-            return jsonify(success=False, error="Limite giornaliero raggiunto.")
+            return jsonify(success=False, error="Daily limit reached.")
         user['evaluations_today'] += 1
         user['earned_today'] += 7.5
         user['balance'] += 7.5
@@ -222,20 +237,20 @@ def salvar_avaliacoes():
 @app.route('/confirm-withdraw', methods=['POST'])
 def confirm_withdraw():
     if 'username' not in session:
-        return jsonify(success=False, error="Sessão expirada.")
+        return jsonify(success=False, error="Session expired.")
     db_data = load_db()
     username = session['username']
     user = db_data['users'][username]
     amount = float(request.form.get('amount'))
     paypal = request.form.get('paypal')
     if abs(amount - user['balance']) > 0.01:
-        return jsonify(success=False, error="Valor inválido.")
+        return jsonify(success=False, error="Invalid amount.")
     if amount < 2000:
-        return jsonify(success=False, error="Saldo insuficiente para saque.")
+        return jsonify(success=False, error="Insufficient balance for withdrawal.")
     if not user['paypal'] and paypal:
         user['paypal'] = paypal
     elif not paypal:
-        return jsonify(success=False, error="Informe o e-mail do PayPal.")
+        return jsonify(success=False, error="Please enter your PayPal email address.")
     user['withdrawn'] += user['balance']
     user['balance'] = 0.0
     user['withdrawn_requests'].append({
@@ -244,49 +259,15 @@ def confirm_withdraw():
         "date": datetime.now().isoformat()
     })
     save_db(db_data)
-    return jsonify(success=True, message="Saque solicitado com sucesso!")
+    return jsonify(success=True, message="Withdrawal requested successfully!")
 
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
 
-@app.route('/send-email', methods=['POST'])
-def send_email():
-    data = request.get_json()
-    email_recebido = data.get('email')
-    print("email_recebido: ", email_recebido)
-    remetente = 'info.team.saq@gmail.com'
-    destinatario = email_recebido
-    assunto = 'Richiesta di rimborso confermata!'
-    mensagem = """
-    Ti inviamo questa e-mail per confermare che la tua richiesta di rimborso è stata ricevuta correttamente e inoltrata al nostro team finanziario, responsabile dell'elaborazione dello storno.
-
-    L'importo sarà rimborsato integralmente con lo stesso metodo di pagamento utilizzato per l'acquisto, entro un termine massimo di 15 giorni.
-    """
-
-    senha = 'ocpt zlxm hete gqkr'
-
-    msg = EmailMessage()
-    msg['From'] = remetente
-    msg['To'] = destinatario
-    msg['Subject'] = assunto
-    msg.set_content(mensagem)
-
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as email:
-        email.login(remetente, senha)
-        email.send_message(msg)
-
-    print("Email enviado com sucesso!")
-
-    return jsonify(success=True)
-
 # -------------------------------
 # Execução local
 # -------------------------------
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8080)
-
-
-
-

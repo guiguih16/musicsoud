@@ -1,5 +1,5 @@
 <!doctype html>
-    <html lang="it">
+    <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,7 +27,7 @@
                     <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a2 2 0 0 1-1-.268M1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1"/>
                 </svg>
             </div>
-            <h2><b>{{ user.balance }}&euro;</b></h2>
+            <h2><b>&dollar;{{ user.balance }}</b></h2>
             <span style="color: #768192;" class="mt-2" id="legends-saldo-currency">Disponível para retirar</span>
             <!-- Button trigger modal -->
             <!-- Botão que abre o modal correto -->
@@ -46,7 +46,7 @@
                     <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/>
                 </svg>
             </div>
-            <h2><b>{{ user.withdrawn }}&euro;</b></h2>
+            <h2><b>&dollar;{{ user.withdrawn }}</b></h2>
             <span style="color: #768192;" class="mt-2" id="legends-analysis">Aguardando aprovação</span>
         </div>
 
@@ -59,7 +59,7 @@
                     <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/>
                 </svg>
             </div>
-            <h2><b>{{ user.last_withdraw_date }}&euro;</b></h2>
+            <h2><b>&dollar;{{ user.last_withdraw_date }}</b></h2>
             <span style="color: #768192;" class="mt-2" id="legends-last-withdrawl">Essendo una transazione internazionale, i tempi previsti sono fino a 5 giorni lavorativi per essere completata.</span>
         </div>
 
@@ -97,7 +97,7 @@
                     <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z"/>
                 </svg>
             </div>
-            <h2><b>{{ user.earned_today }}&euro;</b></h2>
+            <h2><b>&dollar;{{ user.earned_today }}</b></h2>
             <span style="color: #768192;" class="mt-2" id="legends-receit">Gerado hoje</span>
         </div>
 
@@ -105,7 +105,7 @@
         <div class="container mt-3 mx-auto text-center">
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-danger py-4" data-bs-toggle="modal" data-bs-target="#refundModal" style="width: 90%; max-width: 500px;">
-                Richiedi Rimborso
+                Request Refund
             </button>
         </div>
 
@@ -114,15 +114,15 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="refundModalLabel">Conferma Rimborso</h5>
+                    <h5 class="modal-title" id="refundModalLabel">Confirm Refund</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Confermando questo rimborso, il tuo accesso all'app verrà bloccato definitivamente e nessun prelievo sarà approvato. Sei sicuro di voler procedere?
+                    By confirming this refund, your access to the app will be permanently blocked and no withdrawals will be approved. Are you sure you want to proceed?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                    <a href="https://soundrewards.netlify.app/refund" class="btn btn-danger">Conferma Rimborso</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a href="https://soundrewards.netlify.app/refund" class="btn btn-danger">Confirm Refund</a>
                 </div>
                 </div>
             </div>
@@ -138,11 +138,11 @@
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Saldo insuficiente!</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="alert-withdrawl-value-minin">
                     <u>Per effettuare il primo prelievo</u>, è necessario avere un saldo minimo di <b>2.000€</b> disponibile.
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ho capito</button>
+                    <button type="button" id="comfirn-alert-withdrawl" class="btn btn-primary" data-bs-dismiss="modal">Ho capito</button>
                 </div>
                 </div>
             </div>
@@ -153,22 +153,54 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Inserisci il tuo PayPal</h5>
+                        <h5 class="modal-title" id="paypal-modal-title">Inserisci il tuo PayPal</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
                     <div class="modal-body">
-                        <p>Saldo attuale: <b>{{ "%.2f"|format(user.balance) }} €</b></p>
-                        <p>Per procedere, inserisci l'e-mail del tuo PayPal. Se non ne hai uno, per favore, creane uno. un account PayPal</p>
-                        <input type="email" class="form-control" id="inputPaypal" placeholder="nome@paypal.com">
-                        <small class="text-muted">L'importo totale verrà trasferito dopo la verifica.</small>
+                        <p id="paypal-current-balance">
+                            Saldo attuale: <b>{{ "%.2f"|format(user.balance) }} €</b>
+                        </p>
+
+                        <p id="paypal-instructions">
+                            Per procedere, inserisci l'e-mail del tuo PayPal. Se non ne hai uno, per favore, creane uno. un account PayPal
+                        </p>
+
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="inputPaypal"
+                            placeholder="nome@paypal.com"
+                        >
+
+                        <small class="text-muted" id="paypal-note">
+                            L'importo totale verrà trasferito dopo la verifica.
+                        </small>
                     </div>
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                        <button type="button" class="btn btn-primary" onclick="confirmarSaque()">Conferma Prelievo</button>
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                            id="paypal-cancel"
+                        >
+                            Annulla
+                        </button>
+
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            onclick="confirmarSaque()"
+                            id="paypal-confirm"
+                        >
+                            Conferma Prelievo
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <script>
             function verificarSaldo() {
@@ -216,5 +248,4 @@
         <script src="../static/js/lang-dashboard.js" defer></script> <!-- Live Server -->
         <script src="{{ url_for('static', filename='js/lang-dashboard.js') }}" defer></script> <!-- Flask -->
     </body>
-
 </html>

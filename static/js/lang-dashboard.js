@@ -44,6 +44,31 @@ const translations = {
         'legends-receit': 'Generato oggi',
         'staticBackdropLabel': 'Saldo insufficiente!',
         'do-saque': 'EFFETTUA PRELIEVO'
+    },
+    'en': {
+        'saldo-currency': 'Current balance',
+        'legends-saldo-currency': 'Available for withdrawal',
+        'analysis': 'Withdrawals under review',
+        'legends-analysis': 'Pending approval',
+        'avaluations': 'Reviews',
+        'legendas-avaluations': 'Completed today',
+        'limit-day-alert': 'Daily review limit reached! Come back tomorrow to continue.',
+        'wait': 'PLEASE WAIT',
+        'do-avaluations': 'DO REVIEWS',
+        'receit': 'Revenue',
+        'legends-receit': 'Generated today',
+        'staticBackdropLabel': 'Insufficient balance!',
+        'do-saque': 'WITHDRAW FUNDS',
+        'title-last-withdrawl': 'Last withdrawal approved',
+        'legends-last-withdrawl': 'International transfers may take up to 5 business days.',
+        "alert-withdrawl-value-minin": "To make your first withdrawal, you must have a minimum available balance of €2,000.",
+        "comfirn-alert-withdrawl": "I understand",
+        "paypal-modal-title": "Enter your PayPal",
+        "paypal-current-balance": "Current balance:",
+        "paypal-instructions": "To proceed, enter your PayPal email address. If you don’t have one, please create a PayPal account.",
+        "paypal-note": "The full amount will be transferred after verification.",
+        "paypal-cancel": "Cancel",
+        "paypal-confirm": "Confirm Withdrawal"
     }
 };
 
@@ -66,5 +91,5 @@ function applyTranslation(lang) {
 
 // Exemplo de uso
 document.addEventListener('DOMContentLoaded', () => {
-    applyTranslation('it'); // Altere para 'pt', 'es', etc.
+    applyTranslation('en'); // Altere para 'pt', 'es', etc.
 });

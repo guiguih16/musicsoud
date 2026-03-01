@@ -35,6 +35,18 @@ const translations = {
         'confirm-password': 'Conferma password',
         'confirm-username': 'Nome utente',
         'confirm-confirm-password': 'Conferma password'
+    },
+    'en': {
+        'title-form': 'Sign in to continue',
+        'login': 'Sign in',
+        'to-register': 'Register',
+        'create-account': 'Create account',
+        'to-login': 'Sign in',
+        'username': 'Username',
+        'password': 'Password',
+        'confirm-password': 'Confirm password',
+        'confirm-username': 'Username',
+        'confirm-confirm-password': 'Confirm password'
     }
 };
 
@@ -57,5 +69,5 @@ function applyTranslation(lang) {
 
 // Exemplo de uso
 document.addEventListener('DOMContentLoaded', () => {
-    applyTranslation('it'); // Troque para 'es', 'en', etc.
+    applyTranslation('en'); // Troque para 'es', 'en', etc.
 });

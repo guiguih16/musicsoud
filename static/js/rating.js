@@ -43,21 +43,54 @@ function increaseSaldo(v) {
 }
 
 async function proximaAvaliacao(i) {
-    // Esconde avaliação atual
+
     youwin.style.display = 'block'
     increaseSaldo(7.50)
     audio.play();
     await salvarAvaliacao()
+
     setTimeout(() => {
         document.getElementById('rating-' + i).style.display = 'none';
         let proximo = i + 1;
-        // Se existe próxima avaliação, mostra ela
+
         youwin.style.display = 'none'
+
         if (document.getElementById('rating-' + proximo)) {
             document.getElementById('rating-' + proximo).style.display = 'block';
+            iniciarContagem('rating-timer-' + proximo, 'rating-' + proximo);
         } else {
-            // Se não tem próxima, pode redirecionar ou mostrar mensagem
             myModal.show()
         }
     }, 3000);
 }
+
+
+function iniciarContagem(classRating, containerId) {
+
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // 🔒 Apenas botões desse card
+    const botoes = container.querySelectorAll('button');
+    botoes.forEach(btn => btn.disabled = true);
+
+    const span = container.querySelector(`.${classRating}`);
+    let segundos = 1;
+
+    span.textContent = `Please wait ${segundos} seconds to rate`;
+
+    const intervalo = setInterval(() => {
+        segundos--;
+        span.textContent = `Please wait ${segundos} seconds to rate`;
+
+        if (segundos <= 0) {
+            clearInterval(intervalo);
+            span.textContent = '';
+            botoes.forEach(btn => btn.disabled = false);
+        }
+    }, 1000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    iniciarContagem('rating-timer-0', 'rating-0');
+});

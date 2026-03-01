@@ -1,5 +1,5 @@
 <!doctype html>
-    <html lang="it">
+    <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +14,7 @@
             <p id="title-form" style="color: #768192;" class="mt-2">Entre na sua conta para continuar</p>
             <br>
             <div class="alert alert-danger" role="alert">
-                Instabilità temporanea nella riproduzione audio musicale. Stiamo lavorando per risolvere il problema.
+                Temporary instability in music audio playback. We’re working to resolve it.
             </div>
             {% if error %}
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -65,5 +65,4 @@
         <script src="{{ url_for('static', filename='js/login.js') }}" defer></script> <!-- Flask -->
         <script src="{{ url_for('static', filename='js/lang-login.js') }}" defer></script> <!-- Flask -->
     </body>
-
 </html>
