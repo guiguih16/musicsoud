@@ -8,8 +8,8 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 # Conexão com MongoDB
 # -------------------------------
 
-# mongo_uri = os.environ.get("MONGO_URL") >> USAR NO RAILWAY    
-mongo_uri = "mongodb://localhost:27017"
+mongo_uri = os.environ.get("MONGO_URL") >> USAR NO RAILWAY    
+# mongo_uri = "mongodb://localhost:27017"
 if mongo_uri is None:
     raise Exception("MONGO_URL não encontrada no Railway")
 
@@ -271,3 +271,4 @@ def logout():
 # -------------------------------
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8080)
+
